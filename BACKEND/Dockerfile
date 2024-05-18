@@ -13,12 +13,17 @@ RUN apt-get update && \
     docker-php-ext-install zip && \
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
+# Changer les permissions du répertoire de travail
+RUN chown -R www-data:www-data /var/www/html && chmod -R 755 /var/www/html
+
+# Exécuter Composer en tant qu'utilisateur www-data pour éviter les problèmes de permission
+USER www-data
+
 # Installer les dépendances Composer
 RUN composer install --no-plugins --no-scripts --prefer-dist
 
-# Donner les permissions correctes aux fichiers
-RUN chown -R www-data:www-data /var/www/html && \
-    chmod -R 755 /var/www/html
+# Revenir à l'utilisateur root pour la suite des opérations
+USER root
 
 # Exposer le port 80
 EXPOSE 80

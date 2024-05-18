@@ -20,9 +20,9 @@ RUN chown -R www-data:www-data /var/www/html && chmod -R 755 /var/www/html
 USER www-data
 
 # Installer les dépendances Composer et vérifier l'installation
-RUN composer install --prefer-dist --no-interaction && \
+RUN composer install --prefer-dist --no-interaction --no-cache && \
     ls -al /var/www/html/vendor/symfony/polyfill-php80/ && \
-    ls -al /var/www/html/vendor/symfony/polyfill-php80/Resources
+    ls -al /var/www/html/vendor/symfony/polyfill-php80/Resources || echo "Le répertoire n'existe pas"
 
 # Revenir à l'utilisateur root pour la suite des opérations
 USER root

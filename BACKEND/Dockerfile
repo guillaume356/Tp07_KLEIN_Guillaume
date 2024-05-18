@@ -19,11 +19,10 @@ RUN chown -R www-data:www-data /var/www/html && chmod -R 755 /var/www/html
 # Exécuter Composer en tant qu'utilisateur www-data pour éviter les problèmes de permission
 USER www-data
 
-# Ajouter une étape de débogage pour vérifier le répertoire
-RUN ls -al /var/www/html/vendor/symfony/polyfill-php80/Resources
-
-# Installer les dépendances Composer
-RUN composer install --prefer-dist
+# Installer les dépendances Composer et vérifier l'installation
+RUN composer install --prefer-dist --no-interaction && \
+    ls -al /var/www/html/vendor/symfony/polyfill-php80/ && \
+    ls -al /var/www/html/vendor/symfony/polyfill-php80/Resources
 
 # Revenir à l'utilisateur root pour la suite des opérations
 USER root
